@@ -1,5 +1,23 @@
 export type TransitionsDef<S extends string> = Record<S, S[]>;
 
+type FSMDef<StateType extends string, Entity extends Record<string, unknown>> =
+    {
+        currentState: StateType;
+        availableStates: StateType[];
+        entity: Entity;
+        can(state: StateType): boolean;
+        transition(state: StateType): Promise<FSMDef<StateType, Entity>>;
+    };
+
+type FSMCreate<
+    StateType extends string,
+    Entity extends Record<string, unknown>,
+    Ctx extends Record<string, unknown>,
+> = (
+    entity: Entity,
+    ctx: Ctx,
+) => FSMDef<StateType, Entity>;
+
 export function createFSM<
     StateType extends string,
     Entity extends Record<string, unknown>,
@@ -15,7 +33,7 @@ export function createFSM<
             entity: Entity;
         }): Promise<Entity>;
     },
-) {
+): FSMCreate<StateType, Entity, Ctx> {
     function create(entity: Entity, ctx: Ctx) {
         const currentState = opts.getState(entity);
         const availableStates = def[currentState];
