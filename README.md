@@ -1,6 +1,6 @@
 # SFSM
 
-SFSM is schema driven finite state machine library for TypeScript.
+**Work in progress**. SFSM is schema driven finite state machine library for TypeScript.
 
 ## TODO
 
